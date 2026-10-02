@@ -1,0 +1,54 @@
+---
+# defaults file for configure_docker
+
+install_docker: true
+
+apt_repo_uri: https://download.docker.com/linux/ubuntu
+apt_suites: >-
+  {{
+    (ansible_facts | default({})).get('distribution_release')
+    | default(ansible_distribution_release | default('', true), true)
+  }}
+
+apt_architectures: >-
+  {{
+    (ansible_facts | default({})).get('architecture')
+    | default(ansible_architecture | default('', true), true)
+    | replace('x86_64', 'amd64')
+    | replace('aarch64', 'arm64')
+    | replace('armv7l', 'armhf')
+    | replace('armv6l', 'armhf')
+  }}
+apt_components: stable
+apt_type: deb
+apt_cache_valid_time: 3600
+
+
+gpg_key_uri: https://download.docker.com/linux/ubuntu/gpg
+gpg_key_path: /etc/apt/keyrings
+gpg_key_mode: '0755'
+
+docker_gpg_key_mode: '0644'
+docker_apt_source_file_path: '/etc/apt/sources.list.d/docker.sources'
+docker_pkg_state: present
+required_pkgs:
+  - ca-certificates
+  - curl
+
+docker_pkgs:
+  - docker-ce 
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
+
+
+conflicting_docker_packages:
+  - docker.io
+  - docker-compose
+  - docker-compose-v2
+  - docker-doc
+  - docker-buildx
+  - podman-docker
+  - containerd
+  - runc

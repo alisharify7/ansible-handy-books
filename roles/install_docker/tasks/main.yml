@@ -1,0 +1,8 @@
+---
+# tasks file for install_docker
+- name: include install tasks
+  ansible.builtin.include_tasks: install.yml
+  when: install_docker | bool
+  tags:
+    - install
+    - always

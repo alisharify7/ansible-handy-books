@@ -1,0 +1,6 @@
+---
+# defaults file for configure_docker
+mirrors:
+  - url: "https://mirror.gcr.io"
+    name: "gcr"
+  
